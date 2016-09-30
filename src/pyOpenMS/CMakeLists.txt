@@ -58,7 +58,7 @@ execute_process(
      OUTPUT_VARIABLE PY_VERSION
      OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-
+	
 message(STATUS "Python found at ${PYTHON_EXECUTABLE} with version ${PY_VERSION} (if this is wrong, configure with -DPYTHON_EXECUTABLE:FILEPATH=/path/to/python)")
 
 #------------------------------------------------------------------------------
@@ -67,16 +67,16 @@ message(STATUS "Python found at ${PYTHON_EXECUTABLE} with version ${PY_VERSION} 
 if(WIN32)
     if(NOT MSVC90)
         message(STATUS "Need Visual C++ 2008 compiler for building Python 2.[67] extensions")
-        message(FATAL_ERROR "Either reconfigure with Visual Studio 9 2008 generator or disable pyOpenMS.")
+        #message(FATAL_ERROR "Either reconfigure with Visual Studio 9 2008 generator or disable pyOpenMS.")
     endif()
 
-    include(InstallRequiredSystemLibraries)
-    set(MSVCR90DLL ${MSVC90_CRT_DIR}/msvcr90.dll)
+    #include(InstallRequiredSystemLibraries)
+    set(MSVCR90DLL "C:/Users/bo/Source/Repos/OpenMS/dummy.txt")
     if(NOT EXISTS ${MSVCR90DLL})
         message(STATUS "Missing msvcr90.dll - Visual C++ 2008 Runtime (called vcredist)")
         message(FATAL_ERROR "Please install VC 2008 runtime package or disable pyOpenMS.")
     endif()
-    set(MSVCP90DLL ${MSVC90_CRT_DIR}/msvcp90.dll)
+    set(MSVCP90DLL "C:/Users/bo/Source/Repos/OpenMS/dummy.txt")
     if(NOT EXISTS ${MSVCP90DLL})
         message(STATUS "Missing msvcp90.dll - Visual C++ 2008 Runtime (called vcredist)")
         message(FATAL_ERROR "Please install VC 2008 runtime package or disable pyOpenMS.")
@@ -122,14 +122,14 @@ if(AUTOWRAP_MISSING)
 else()
     execute_process(
         COMMAND
-        ${PYTHON_EXECUTABLE} -c "import autowrap; exit(autowrap.version >= (0, 8, 0))"
+        ${PYTHON_EXECUTABLE} -c "import autowrap; exit(autowrap.version >= (0, 7, 1))"
         RESULT_VARIABLE _AUTOWRAP_VERSION_OK
         ERROR_QUIET
         OUTPUT_QUIET
     )
     execute_process(
         COMMAND
-        ${PYTHON_EXECUTABLE} -c "from __future__ import print_function; import autowrap; print ('%d.%d.%d' % (autowrap.version))"
+        ${PYTHON_EXECUTABLE} -c "from __future__ import print_function;import autowrap; print ('%d.%d.%d' % (autowrap.version))"
         OUTPUT_VARIABLE AUTOWRAP_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
@@ -137,7 +137,7 @@ else()
         message(STATUS "Looking for autowrap - found autowrap ${AUTOWRAP_VERSION}, version ok")
         set(AUTOWRAP_VERSION_OK TRUE)
     else()
-        message(STATUS "Found autowrap version ${AUTOWRAP_VERSION}. The version is to old (>= 0.8.0 is required)")
+        message(STATUS "Found autowrap version ${AUTOWRAP_VERSION}. The version is to old (>= 0.7.1 is required)")
         message(FATAL_ERROR "Please upgrade autowrap or disable pyOpenMS.")
     endif()
 endif()
