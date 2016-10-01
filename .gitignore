@@ -17,4 +17,5 @@ OpenMS.config
 OpenMS.creator
 OpenMS.files
 OpenMS.includes
-/buildPyOpenMS
+/build_pyopenms
+/share/OpenMS/THIRDPARTY
