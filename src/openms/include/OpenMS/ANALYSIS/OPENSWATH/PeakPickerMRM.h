@@ -71,7 +71,8 @@ public:
 
     //@{
     /// Constructor
-    PeakPickerMRM();
+		§PeakPickerMRM
+		();
 
     /// Destructor
     ~PeakPickerMRM() {}
