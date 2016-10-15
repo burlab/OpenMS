@@ -45,7 +45,7 @@ namespace OpenMS
   MRMTransitionGroupPicker::MRMTransitionGroupPicker() :
     DefaultParamHandler("MRMTransitionGroupPicker")
   {
-    defaults_.setValue("stop_after_feature", -1, "Stop finding after feature (ordered by intensity; -1 means do not stop).");
+	defaults_.setValue("stop_after_feature", -1, "Stop finding after feature (ordered by intensity; -1 means do not stop).");
     defaults_.setValue("stop_after_intensity_ratio", 0.0001, "Stop after reaching intensity ratio");
     defaults_.setValue("min_peak_width", -1.0, "Minimal peak width (s), discard all peaks below this value (-1 means no action).", ListUtils::create<String>("advanced"));
 
