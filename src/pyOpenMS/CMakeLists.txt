@@ -58,7 +58,7 @@ execute_process(
      OUTPUT_VARIABLE PY_VERSION
      OUTPUT_STRIP_TRAILING_WHITESPACE
 )
-
+	
 message(STATUS "Python found at ${PYTHON_EXECUTABLE} with version ${PY_VERSION} (if this is wrong, configure with -DPYTHON_EXECUTABLE:FILEPATH=/path/to/python)")
 
 #------------------------------------------------------------------------------
@@ -67,16 +67,16 @@ message(STATUS "Python found at ${PYTHON_EXECUTABLE} with version ${PY_VERSION} 
 if(WIN32)
     if(NOT MSVC90)
         message(STATUS "Need Visual C++ 2008 compiler for building Python 2.[67] extensions")
-        message(FATAL_ERROR "Either reconfigure with Visual Studio 9 2008 generator or disable pyOpenMS.")
+        #message(FATAL_ERROR "Either reconfigure with Visual Studio 9 2008 generator or disable pyOpenMS.")
     endif()
 
-    include(InstallRequiredSystemLibraries)
-    set(MSVCR90DLL ${MSVC90_CRT_DIR}/msvcr90.dll)
+    #include(InstallRequiredSystemLibraries)
+    set(MSVCR90DLL "C:/Users/bo/Source/Repos/OpenMS/dummy.txt")
     if(NOT EXISTS ${MSVCR90DLL})
         message(STATUS "Missing msvcr90.dll - Visual C++ 2008 Runtime (called vcredist)")
         message(FATAL_ERROR "Please install VC 2008 runtime package or disable pyOpenMS.")
     endif()
-    set(MSVCP90DLL ${MSVC90_CRT_DIR}/msvcp90.dll)
+    set(MSVCP90DLL "C:/Users/bo/Source/Repos/OpenMS/dummy.txt")
     if(NOT EXISTS ${MSVCP90DLL})
         message(STATUS "Missing msvcp90.dll - Visual C++ 2008 Runtime (called vcredist)")
         message(FATAL_ERROR "Please install VC 2008 runtime package or disable pyOpenMS.")
@@ -92,36 +92,21 @@ if(DEFINED CYTHON_EXECUTABLE-NOTFOUND)
 	set(CYTHON_MISSING TRUE)
 endif()
 
-# check minor version of Cython (0.xx.yy)
-# Working versions (tested manually) are 0.22, 0.23, 0.24 and 0.25
-set(CYTHON_VERSION_OK FALSE)
 if(CYTHON_MISSING)
 	message(FATAL_ERROR "Looking for cython - not found")
 else()
+  # find out cython version info
   execute_process(
-      COMMAND
-      ${PYTHON_EXECUTABLE} -c "import Cython; exit(int(Cython.__version__.split('.')[1]) >= 22)"
-      RESULT_VARIABLE _CYTHON_VERSION_OK
-      ERROR_QUIET
-      OUTPUT_QUIET
+       COMMAND
+       ${PYTHON_EXECUTABLE} -c "from __future__ import print_function; import Cython; print (Cython.__version__)"
+       OUTPUT_VARIABLE CYTHON_VERSION
+       OUTPUT_STRIP_TRAILING_WHITESPACE
   )
-  execute_process(
-      COMMAND
-      ${PYTHON_EXECUTABLE} -c "from __future__ import print_function; import Cython; print (Cython.__version__)"
-      OUTPUT_VARIABLE CYTHON_VERSION
-      OUTPUT_STRIP_TRAILING_WHITESPACE
-  )
-  if(_CYTHON_VERSION_OK)
-      message(STATUS "Looking for Cython - found Cython ${CYTHON_VERSION}, version ok")
-      set(CYTHON_VERSION_OK TRUE)
-  else()
-      message(STATUS "Found Cython version ${CYTHON_VERSION}. The version is too old (>= 0.22 is required)")
-      message(FATAL_ERROR "Please upgrade Cython or disable pyOpenMS.")
-  endif()
+  message(STATUS "Looking for cython - found version ${CYTHON_VERSION} (should be 0.23 or higher)")
 endif()
 
 #------------------------------------------------------------------------------
-# Check for autowrap
+# Check for autowrap Cython
 execute_process(
      COMMAND
      ${PYTHON_EXECUTABLE} -c "import autowrap"
@@ -131,19 +116,20 @@ execute_process(
 )
 
 set(AUTOWRAP_VERSION_OK FALSE)
+
 if(AUTOWRAP_MISSING)
 	message(STATUS "Looking for autowrap - not found")
 else()
     execute_process(
         COMMAND
-        ${PYTHON_EXECUTABLE} -c "import autowrap; exit(autowrap.version >= (0, 8, 0))"
+        ${PYTHON_EXECUTABLE} -c "import autowrap; exit(autowrap.version >= (0, 7, 1))"
         RESULT_VARIABLE _AUTOWRAP_VERSION_OK
         ERROR_QUIET
         OUTPUT_QUIET
     )
     execute_process(
         COMMAND
-        ${PYTHON_EXECUTABLE} -c "from __future__ import print_function; import autowrap; print ('%d.%d.%d' % (autowrap.version))"
+        ${PYTHON_EXECUTABLE} -c "from __future__ import print_function;import autowrap; print ('%d.%d.%d' % (autowrap.version))"
         OUTPUT_VARIABLE AUTOWRAP_VERSION
         OUTPUT_STRIP_TRAILING_WHITESPACE
     )
@@ -151,7 +137,7 @@ else()
         message(STATUS "Looking for autowrap - found autowrap ${AUTOWRAP_VERSION}, version ok")
         set(AUTOWRAP_VERSION_OK TRUE)
     else()
-        message(STATUS "Found autowrap version ${AUTOWRAP_VERSION}. The version is too old (>= 0.8.0 is required)")
+        message(STATUS "Found autowrap version ${AUTOWRAP_VERSION}. The version is to old (>= 0.7.1 is required)")
         message(FATAL_ERROR "Please upgrade autowrap or disable pyOpenMS.")
     endif()
 endif()
@@ -238,7 +224,7 @@ else()
         message(STATUS "Looking for setuptools - found setuptools ${SETUPTOOLS_VERSION}, version ok")
         set(SETUPTOOLS_VERSION_OK TRUE)
     else()
-        message(STATUS "Found setuptools version ${SETUPTOOLS_VERSION}. The version is too old (>= 12.0 is required)")
+        message(STATUS "Found setuptools version ${SETUPTOOLS_VERSION}. The version is to old (>= 12.0 is required)")
         message(FATAL_ERROR "Please upgrade setuptools or disable pyOpenMS.")
     endif()
 endif()
@@ -260,7 +246,7 @@ endif()
 #------------------------------------------------------------------------------
 # Handle missing libraries (this should never be reached, as the individual
 #  parts should fire FATAL_ERRORs if something is missing)
-if(NUMPY_MISSING OR CYTHON_MISSING OR NOT CYTHON_VERSION_OK OR NOT AUTOWRAP_VERSION_OK OR NOSE_MISSING
+if(NUMPY_MISSING OR CYTHON_MISSING OR NOT AUTOWRAP_VERSION_OK OR NOSE_MISSING
    OR SETUPTOOLS_MISSING OR WHEEL_MISSING)
   message(FATAL_ERROR "Required Python modules not found or out of date")
 endif()
