@@ -35,7 +35,7 @@ cdef extern from "<OpenMS/ANALYSIS/ID/IDMapper.h>" namespace "OpenMS":
                       libcpp_vector[PeptideIdentification] & ids,
                       libcpp_vector[ProteinIdentification] & protein_ids) nogil except +
 
-        void annotate(ConsensusMap & cmap,
+        void annotate(ConsensusMap & map_,
                       MSExperiment[Peak1D, ChromatogramPeak] & pmap, 
                       bool measure_from_subelements, 
                       bool annotate_with_subelements) nogil except +
