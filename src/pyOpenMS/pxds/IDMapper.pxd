@@ -20,25 +20,30 @@ cdef extern from "<OpenMS/ANALYSIS/ID/IDMapper.h>" namespace "OpenMS":
         IDMapper() nogil except +
         IDMapper(IDMapper) nogil except +
 
-        void annotate(ConsensusMap & map_,
+        void annotate(MSExperiment[Peak1D, ChromatogramPeak] & map_,
                       libcpp_vector[PeptideIdentification] & ids,
                       libcpp_vector[ProteinIdentification] & protein_ids,
-                      bool measure_from_subelements) nogil except +
+                      bool clear_ids,
+                      bool mapMS1) nogil except +
+					  
+        void annotate(MSExperiment[Peak1D, ChromatogramPeak] & map_,
+                      FeatureMap & fmap,
+                      bool clear_ids,
+                      bool mapMS1) nogil except +
 
         void annotate(FeatureMap & map_,
                       libcpp_vector[PeptideIdentification] & ids,
                       libcpp_vector[ProteinIdentification] & protein_ids,
                       bool use_centroid_rt,
-                      bool use_centroid_mz) nogil except +
-
-        void annotate(MSExperiment[Peak1D, ChromatogramPeak] & map_,
-                      libcpp_vector[PeptideIdentification] & ids,
-                      libcpp_vector[ProteinIdentification] & protein_ids) nogil except +
+                      bool use_centroid_mz,
+                      MSExperiment[Peak1D, ChromatogramPeak] & spectra) nogil except +
 
         void annotate(ConsensusMap & map_,
-                      MSExperiment[Peak1D, ChromatogramPeak] & pmap, 
-                      bool measure_from_subelements, 
-                      bool annotate_with_subelements) nogil except +
+                      libcpp_vector[PeptideIdentification] & ids,
+                      libcpp_vector[ProteinIdentification] & protein_ids,
+                      bool measure_from_subelements,
+                      bool annotate_ids_with_subelements, 
+                      MSExperiment[Peak1D, ChromatogramPeak] & spectra) nogil except +
 
 cdef extern from "<OpenMS/ANALYSIS/ID/IDMapper.h>" namespace "OpenMS::IDMapper":
     cdef enum Measure:
