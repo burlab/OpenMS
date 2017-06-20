@@ -83,7 +83,11 @@ namespace OpenMS
     DefaultParamHandler("MRMFeatureFinderScoring"),
     ProgressLogger()
   {
-    defaults_.setValue("stop_report_after_feature", -1, "Stop reporting after feature (ordered by quality; -1 means do not stop).");
+	  //BB:
+	defaults_.setValue("allow_single_transition_groups", "true", "Whether also only 1 transitions per transition group is allowed");
+	defaults_.setValidStrings("allow_single_transition_groups", ListUtils::create<String>("true,false"));
+
+	defaults_.setValue("stop_report_after_feature", -1, "Stop reporting after feature (ordered by quality; -1 means do not stop).");
     defaults_.setValue("rt_extraction_window", -1.0, "Only extract RT around this value (-1 means extract over the whole range, a value of 500 means to extract around +/- 500 s of the expected elution). For this to work, the TraML input file needs to contain normalized RT values.");
     defaults_.setValue("rt_normalization_factor", 1.0, "The normalized RT is expected to be between 0 and 1. If your normalized RT has a different range, pass this here (e.g. it goes from 0 to 100, set this value to 100)");
     defaults_.setValue("quantification_cutoff", 0.0, "Cutoff in m/z below which peaks should not be used for quantification any more", ListUtils::create<String>("advanced"));
@@ -199,7 +203,7 @@ namespace OpenMS
     {
       if (trgroup_it->second.getChromatograms().size() > 0) {counter++; }
     }
-    std::cout << "Will analyse " << counter << " peptides with a total of " << transition_exp.getTransitions().size() << " transitions " << std::endl;
+    LOG_INFO << "Will analyse " << counter << " peptides with a total of " << transition_exp.getTransitions().size() << " transitions " << std::endl;
 
     //
     // Step 3
@@ -416,7 +420,7 @@ namespace OpenMS
         throw Exception::IllegalArgument(__FILE__, __LINE__, OPENMS_PRETTY_FUNCTION,
                                          "Error: Transition group " + transition_group_detection.getTransitionGroupID() + " has no chromatograms.");
       }
-      if (group_size < 2)
+      if (group_size < 2 && !allow_single_transition_groups_)
       {
         LOG_ERROR << "Error: Transition group " << transition_group_detection.getTransitionGroupID()
                   << " has only one chromatogram." << std::endl;
@@ -640,6 +644,7 @@ namespace OpenMS
 
   void MRMFeatureFinderScoring::updateMembers_()
   {
+	allow_single_transition_groups_ = param_.getValue("allow_single_transition_groups").toBool();
     stop_report_after_feature_ = (int)param_.getValue("stop_report_after_feature");
     rt_extraction_window_ = (double)param_.getValue("rt_extraction_window");
     rt_normalization_factor_ = (double)param_.getValue("rt_normalization_factor");
