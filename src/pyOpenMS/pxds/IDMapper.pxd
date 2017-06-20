@@ -25,7 +25,7 @@ cdef extern from "<OpenMS/ANALYSIS/ID/IDMapper.h>" namespace "OpenMS":
                       libcpp_vector[ProteinIdentification] & protein_ids,
                       bool clear_ids,
                       bool mapMS1) nogil except +
-					  
+
         void annotate(MSExperiment[Peak1D, ChromatogramPeak] & map_,
                       FeatureMap & fmap,
                       bool clear_ids,
@@ -44,6 +44,7 @@ cdef extern from "<OpenMS/ANALYSIS/ID/IDMapper.h>" namespace "OpenMS":
                       bool measure_from_subelements,
                       bool annotate_ids_with_subelements, 
                       MSExperiment[Peak1D, ChromatogramPeak] & spectra) nogil except +
+
 
 cdef extern from "<OpenMS/ANALYSIS/ID/IDMapper.h>" namespace "OpenMS::IDMapper":
     cdef enum Measure:
