@@ -187,3 +187,6 @@ OpenMS.includes
 /share/OpenMS/THIRDPARTY/64bit/LuciPHOr2/LICENSE.txt
 /share/OpenMS/THIRDPARTY/64bit/Fido/FidoChooseParameters.exe
 /share/OpenMS/THIRDPARTY/64bit/Fido/Fido.exe
+/build_pyopenms
+/share/OpenMS/THIRDPARTY
+/
