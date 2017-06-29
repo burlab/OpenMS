@@ -277,6 +277,7 @@ private:
     void updateMembers_();
 
     // parameters
+	bool allow_single_transition_groups_;
     double rt_extraction_window_;
     double quantification_cutoff_;
     int stop_report_after_feature_;
